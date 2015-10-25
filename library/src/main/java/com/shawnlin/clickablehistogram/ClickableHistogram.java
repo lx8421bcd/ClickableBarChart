@@ -37,7 +37,19 @@ public class ClickableHistogram extends LinearLayout {
      */
     private List<ChartColumn> columns = new ArrayList<>();
 
-    Paint linePaint = new Paint();
+    private Paint linePaint = new Paint();
+    private OnColumnClickListener listener = null;
+    private OnClickListener onClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            for(int i = 0; i < columns.size(); i++) {
+                View columnView = columns.get(i).getView();
+                if(columnView.equals(v) && listener != null) {
+                    listener.onColumnClick(v,i,dataSource.get(i));
+                }
+            }
+        }
+    };
 
     public ClickableHistogram(Context context) {
         super(context);
@@ -205,6 +217,7 @@ public class ClickableHistogram extends LinearLayout {
             //向表容器中添加图列控件
             ChartColumn column = new ChartColumn(getContext(), columnWidth, columnMargin, columnColor);
             columns.add(column);
+            column.getView().setOnClickListener(onClickListener);
             this.addView(column.getView());
         }
         this.invalidate();
@@ -215,20 +228,7 @@ public class ClickableHistogram extends LinearLayout {
      * 为图列设置OnClickLister
      */
     public void setColumnOnClickListener(final OnColumnClickListener listener) {
-        OnClickListener onClickListener = new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for(int i = 0; i < columns.size(); i++) {
-                    View columnView = columns.get(i).getView();
-                    if(columnView.equals(v)) {
-                        listener.onColumnClick(v,i,dataSource.get(i));
-                    }
-                }
-            }
-        };
-        for(ChartColumn column : columns) {
-            column.getView().setOnClickListener(onClickListener);
-        }
+        this.listener = listener;
     }
 
     /**
