@@ -26,8 +26,8 @@ public class ClickableHistogram extends LinearLayout {
     private int columnWidth, columnMargin, axisWidth, textSize; //dimensions
     private int columnColor, axisColor, textColor; //colors
     private float lineEndX, moveX;
-    private float columnMaxHeight; //图列最大高度,为控件高度的0.8倍
-    private float expMaxHeight; //图列期望最大高度,由输入数据源中最大的数决定
+    private float columnMaxHeight; //columns max height, 0.8 times of view height
+    private float expMaxHeight; //columns expectation max height, depends on max value in data source
     /**
      * 输入数据源,控件根据数据源初始化X轴长度和图列
      */
@@ -131,7 +131,7 @@ public class ClickableHistogram extends LinearLayout {
      */
     private void drawColumns() {
         for (int i = 0; i < columns.size(); i++) {
-            //向容器中添加控件
+            //add columns to the container
             int columnHeight = getColumnHeight(dataSource.get(i).getValue());
             Log.d(TAG, "columnHeight = " + columnHeight);
             ChartColumn column = columns.get(i);
