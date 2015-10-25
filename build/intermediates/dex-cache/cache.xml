@@ -5,36 +5,8 @@
         jar="/Users/ShawnLin/Projects/ClickableHistogram/sample/build/intermediates/exploded-aar/ClickableHistogram/library/unspecified/jars/classes.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="5320acb62f2af6a67f0aa3eaff9f8448d15f94f4">
+        sha1="84a457babc1cdcdf3d7b5f27b7812d5d88709266">
         <dex dex="/Users/ShawnLin/Projects/ClickableHistogram/sample/build/intermediates/pre-dexed/debug/classes-a0ffd455a7a4a6ce5368fc2c79e5d5a295c11707.jar" />
-    </item>
-    <item
-        jar="/Users/ShawnLin/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.1.0/support-annotations-23.1.0.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="92e3fc113ec3ee36b64603a38857b95700025633">
-        <dex dex="/Users/ShawnLin/Projects/ClickableHistogram/sample/build/intermediates/pre-dexed/debug/support-annotations-23.1.0-fde149b842496f0b0d95bf23b7c09e73507e5dea.jar" />
-    </item>
-    <item
-        jar="/Users/ShawnLin/Projects/ClickableHistogram/sample/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/libs/internal_impl-23.1.0.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="8716243bf04bae8d6c9ca94d27b9a9be7236f0a3">
-        <dex dex="/Users/ShawnLin/Projects/ClickableHistogram/sample/build/intermediates/pre-dexed/debug/internal_impl-23.1.0-9246551fa1290a8af0ccdb948a1eb8fdb717f4c5.jar" />
-    </item>
-    <item
-        jar="/Users/ShawnLin/Projects/ClickableHistogram/sample/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="57ae0d750ff83f0c738d21720224ac7ea866a094">
-        <dex dex="/Users/ShawnLin/Projects/ClickableHistogram/sample/build/intermediates/pre-dexed/debug/classes-4ed69de39f9e06fc76cb2945dd7edc8fb56c7d06.jar" />
-    </item>
-    <item
-        jar="/Users/ShawnLin/Projects/ClickableHistogram/sample/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
-        <dex dex="/Users/ShawnLin/Projects/ClickableHistogram/sample/build/intermediates/pre-dexed/debug/classes-38923c61cd95782b6b54082698dc92622c9e1666.jar" />
     </item>
 
 </items>

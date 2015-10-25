@@ -5,14 +5,13 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Handler;
-import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +21,6 @@ import java.util.List;
  */
 public class ClickableHistogram extends LinearLayout {
     private static final String TAG = ClickableHistogram.class.getSimpleName();
-
-    private static final int DRAW_X_LINE = 0;
-    private static final int START_COLUMNS_ANIMATION = 1;
 
     private int width, height; //the width and height of this view.
     private int columnWidth, columnMargin, axisWidth, textSize; //dimensions
@@ -41,24 +37,6 @@ public class ClickableHistogram extends LinearLayout {
      */
     private List<ChartColumn> columns = new ArrayList<>();
 
-    WeakReference<Handler> wr = new WeakReference<Handler>(new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case DRAW_X_LINE:
-                    if (moveX < lineEndX) {
-                        moveX += lineEndX / 50;
-                        invalidate();
-                        this.sendEmptyMessageDelayed(0, 10);
-                    }
-                    break;
-                case START_COLUMNS_ANIMATION:
-                    drawColumns();
-                    break;
-            }
-        }
-    });
     Paint linePaint = new Paint();
 
     public ClickableHistogram(Context context) {
@@ -83,8 +61,8 @@ public class ClickableHistogram extends LinearLayout {
         textColor = typedArray.getColor(R.styleable.ClickableHistogram_textColor,
                 getResources().getColor(R.color.black));
         typedArray.recycle();
-
     }
+
     /**
      * 在此方法中获取到控件的宽高
      */
@@ -97,12 +75,9 @@ public class ClickableHistogram extends LinearLayout {
 
         lineEndX = width;
         moveX = 0;
-        Handler handler = wr.get();
-        handler.sendEmptyMessage(DRAW_X_LINE);
-        handler.sendEmptyMessage(START_COLUMNS_ANIMATION);
-        //set child position, upon x line
+        //set child position, upon X-axis
         this.setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), getPaddingBottom() + textSize + axisWidth);
-        //initialize X line paint
+        //initialize X-axis paint
         linePaint.setAntiAlias(true);
         linePaint.setColor(axisColor);
         linePaint.setStyle(Paint.Style.FILL);
@@ -114,7 +89,7 @@ public class ClickableHistogram extends LinearLayout {
 
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
-        Log.e(TAG, "widthMeasureSpec = " + widthMeasureSpec + ", height = " + height);
+//        Log.e(TAG, "widthMeasureSpec = " + widthMeasureSpec + ", height = " + height);
         if (width == 0) {
             width = columns.size() * (columnWidth + 2 * columnMargin);
         }
@@ -129,6 +104,13 @@ public class ClickableHistogram extends LinearLayout {
         super.onDraw(canvas);
         Log.d(TAG, "onDraw");
         drawLine(canvas);
+        if (moveX < lineEndX) {
+            moveX += lineEndX / 50;
+            this.postInvalidateDelayed(20);
+        }
+        if (columns.size() > 0 && columns.get(0).getHeight() == 0) {
+            drawColumns();
+        }
         if (moveX >= lineEndX) {
             drawText(canvas);
         }
@@ -208,11 +190,12 @@ public class ClickableHistogram extends LinearLayout {
     }
 
     /**
-     * 设置数据源并初始化柱状图
+     * 设置数据源并初始化柱状图,如果图列已有数据,将会控件现存数据并重新初始化.
      */
     public void setDataSource(List<ColumnData> dataSource) {
         this.dataSource = dataSource;
         this.removeAllViews();
+        columns.clear();
         for (ColumnData data : dataSource) {
             //求出图列期望最大高度
             float temp = data.getValue();
@@ -225,16 +208,29 @@ public class ClickableHistogram extends LinearLayout {
             this.addView(column.getView());
         }
         this.invalidate();
+        Log.d(TAG, "columns size = " + columns.size() + "data source size = " + dataSource.size());
     }
 
     /**
      * 为图列设置OnClickLister
-     * */
-    public void setColumnOnClickListener(OnClickListener listener) {
+     */
+    public void setColumnOnClickListener(final OnColumnClickListener listener) {
+        OnClickListener onClickListener = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for(int i = 0; i < columns.size(); i++) {
+                    View columnView = columns.get(i).getView();
+                    if(columnView.equals(v)) {
+                        listener.onColumnClick(v,i,dataSource.get(i));
+                    }
+                }
+            }
+        };
         for(ChartColumn column : columns) {
-            column.getView().setOnClickListener(listener);
+            column.getView().setOnClickListener(onClickListener);
         }
     }
+
     /**
      * 根据输入数据值计算图列高度
      */
@@ -265,5 +261,19 @@ public class ClickableHistogram extends LinearLayout {
         public float getValue() {
             return value;
         }
+
+        @Override
+        public String toString() {
+            return "ColumnData{" +
+                    "name='" + name + '\'' +
+                    ", value=" + value +
+                    '}';
+        }
     }
+
+    public interface OnColumnClickListener {
+        void onColumnClick(View v, int position, ColumnData data);
+    }
+
+
 }

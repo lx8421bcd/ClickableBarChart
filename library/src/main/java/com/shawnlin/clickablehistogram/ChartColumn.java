@@ -12,12 +12,12 @@ import android.widget.LinearLayout;
  */
 public class ChartColumn {
     View mView;
-    private int viewHeight;
+    private int viewHeight = 0;
 
     public ChartColumn(Context context, int viewWidth, int margin, int color) {
         mView = new View(context);
         mView.setBackgroundColor(color);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(viewWidth, 1);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(viewWidth, 0);
         params.setMargins(margin, 5, margin, 0);
         mView.setLayoutParams(params);
 
