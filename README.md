@@ -20,7 +20,7 @@ dependencies {
     compile 'com.github.shonlin:clickablehistogram:1.0.2-SNAPSHOT'
 }
 ```
-* The view has following special attribution
+* The view has following special attribution  
 columnWidth : width of each column    
 columnMargin : left and right margin of each column   
 axisWidth : width of x-axis   
